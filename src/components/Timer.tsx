@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from 'react';
 
 interface TimerProps {
+  timeLeft: number;
+  setTimeLeft: (timeLeft: number | ((prev: number) => number)) => void;
   duration: number;
   onTimeUp: () => void;
   isActive: boolean;
 }
 
-export const Timer: React.FC<TimerProps> = ({ duration, onTimeUp, isActive }) => {
-  const [timeLeft, setTimeLeft] = useState(duration);
+export const Timer: React.FC<TimerProps> = ({ timeLeft, setTimeLeft, duration, onTimeUp, isActive }) => {
 
   useEffect(() => {
     // Reset timer when isActive changes to true
@@ -23,7 +24,7 @@ export const Timer: React.FC<TimerProps> = ({ duration, onTimeUp, isActive }) =>
 
     if (isActive && timeLeft > 0) {
       timer = setInterval(() => {
-        setTimeLeft((prev) => {
+        setTimeLeft((prev: number) => {
           const newTime = prev - 1;
           if (newTime === 0) {
             // Call onTimeUp in the next tick to avoid state updates during render

@@ -36,6 +36,7 @@ export const TimedNotesGame = () => {
   const handleTimeUp = () => {
     setGameState('completed');
   };
+  const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
 
   const handleExit = () => setShowExitModal(true);
   const handleExitConfirm = () => router.push('/');
@@ -52,10 +53,12 @@ export const TimedNotesGame = () => {
     <>
       <GameLayout
         lives={0}
-        progress={0}
+        progress={(GAME_DURATION - timeLeft) / GAME_DURATION * 100}
         onExit={handleExit}
         rightElement={
-          <Timer 
+          <Timer
+            timeLeft={timeLeft}
+            setTimeLeft={setTimeLeft}
             duration={GAME_DURATION} 
             onTimeUp={handleTimeUp}
             isActive={gameState === 'playing'}
