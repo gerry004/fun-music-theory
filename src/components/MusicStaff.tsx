@@ -118,7 +118,9 @@ const MusicStaff = () => {
           />
         ))}
       </svg>
-      
+      <div className="mt-4 flex justify-center text-2xl font-bold">
+        {randomNoteLetter}
+      </div>
       <div className="mt-4 flex justify-center">
         <button 
           onClick={generateNew}
