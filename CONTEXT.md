@@ -6,15 +6,51 @@ A gamified educational application designed to help children learn music theory 
 ### Home Screen
 The main landing page featuring:
 - Header displaying "Learn Music Theory"
-- Two game options presented as interactive cards:
-  - Play from Note Names
+- There is one game option presented as an interactive card:
   - Read Notes from Stave
 
 Each game card, when clicked, triggers a modal containing:
 - Detailed game description
-- "Start Game" button positioned in bottom-right corner
+- Two buttons for two different game modes:
+  - Play Lives
+  - Play Timed
 
-### Read Notes from Stave Game Flow
+----------------------------------------------------------------
+
+### Read Notes from Stave Game Flow (Timed Mode)
+
+#### Game Interface Elements
+- Navigation Bar:
+  - Exit button (X) in top-left corner
+  - Progress bar in top-center showing game completion
+  - 30 Second Timer with clock icon in the top-right
+- Game Area
+  - Musical stave displaying a single note
+  - Note selection options bar at bottom
+  - Answer submission interface
+
+- Gameplay Mechanics
+  - Note Selection:
+    - Available options: C, D, E, F, G, A, B
+    - Selecting a note saves the answer and shows the next note
+    - Keep showing the next note until the timer runs out
+
+- Game Exit Flows
+  - Manual Exit:
+    - Clicking X button displays modal with options:
+      - "Keep Playing"
+      - "End Session" (returns to home screen)
+
+  - Game Completion:
+    - When the timer runs out, displays results screen showing:
+      - Number of correct answers
+      - Number of incorrect answers
+      - "Play Again" button
+      - "Return to Home" button
+
+----------------------------------------------------------------
+
+### Read Notes from Stave Game Flow (Lives Mode)
 
 #### Game Interface Elements
 - Navigation Bar:
@@ -28,7 +64,7 @@ Each game card, when clicked, triggers a modal containing:
 
 - Gameplay Mechanics
   - Note Selection:
-    - Available options: C, C#, D, D#, E, F, F#, G, G#, A, A#, B
+    - Available options: C, D, E, F, G, A, B
     - Selecting a note reveals the "Check" button in the bottmo right
 
 - Answer Validation
