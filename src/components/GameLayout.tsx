@@ -14,7 +14,7 @@ export const GameLayout = ({ children, lives, progress, onExit, rightElement }: 
   return (
     <div className="min-h-screen p-4">
       {/* Navigation Bar */}
-      <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="flex items-center justify-center gap-4 mb-6">
         {/* Exit Button */}
         <button 
           onClick={onExit}

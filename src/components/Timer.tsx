@@ -1,46 +1,49 @@
 "use client"
 
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TimerProps {
   duration: number;
   onTimeUp: () => void;
-  isActive?: boolean;
+  isActive: boolean;
 }
 
-export const Timer = ({ duration, onTimeUp, isActive = true }: TimerProps) => {
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
-
-  useLayoutEffect(() => {
-    setTimeLeft(duration);
-  }, [duration]);
+export const Timer: React.FC<TimerProps> = ({ duration, onTimeUp, isActive }) => {
+  const [timeLeft, setTimeLeft] = useState(duration);
 
   useEffect(() => {
-    if (!isActive || timeLeft === null) return;
+    // Reset timer when isActive changes to true
+    if (isActive) {
+      setTimeLeft(duration);
+    }
+  }, [isActive, duration]);
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev && prev <= 1) {
-          clearInterval(timer);
-          onTimeUp();
-          return 0;
-        }
-        return prev ? prev - 1 : prev;
-      });
-    }, 1000);
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
 
-    return () => clearInterval(timer);
-  }, [isActive, timeLeft, onTimeUp]);
+    if (isActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          const newTime = prev - 1;
+          if (newTime === 0) {
+            // Call onTimeUp in the next tick to avoid state updates during render
+            setTimeout(onTimeUp, 0);
+          }
+          return newTime;
+        });
+      }, 1000);
+    }
 
-  if (timeLeft === null) return null;
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [timeLeft, isActive, onTimeUp]);
 
   return (
-    <div className="flex items-center gap-2">
-      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <circle cx="12" cy="12" r="10" strokeWidth="2"/>
-        <path strokeLinecap="round" strokeWidth="2" d="M12 6v6l4 2"/>
-      </svg>
-      <span className="font-mono text-xl">{timeLeft}s</span>
+    <div className="text-xl font-bold">
+      Time: {timeLeft}s
     </div>
   );
 }; 

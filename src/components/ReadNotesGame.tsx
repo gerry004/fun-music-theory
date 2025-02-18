@@ -85,7 +85,7 @@ export const ReadNotesGame = () => {
         onExit={handleExit}
       >
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-white">What's the name of this note?</h2>
+          <h2 className="text-2xl font-bold text-black">What's the name of this note?</h2>
         </div>
         <MusicStaff
           ref={staffRef}
