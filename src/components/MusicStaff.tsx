@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 
 const TREBLE_NOTE_TO_Y_MULTIPLE_MAP = {
   "-1": "G",
@@ -30,7 +30,15 @@ const BASS_NOTE_TO_Y_MULTIPLE_MAP = {
   "9": "F",
 }
 
-const MusicStaff = () => {
+interface MusicStaffProps {
+  onNoteChange?: (note: string) => void;
+  showAnswer?: boolean;
+}
+
+const MusicStaff = forwardRef<
+  { generateNew: () => void; getCurrentNote: () => string },
+  MusicStaffProps
+>(({ onNoteChange, showAnswer = true }, ref) => {
   // Staff configuration
   const staffWidth = 600;
   const staffHeight = 300;
@@ -59,6 +67,17 @@ const MusicStaff = () => {
   const randomNoteLetter = noteMap[randomNoteString as keyof typeof TREBLE_NOTE_TO_Y_MULTIPLE_MAP];
   const noteY = staffStartY + (lineSpacing * randomNote);
   
+  useImperativeHandle(ref, () => ({
+    generateNew,
+    getCurrentNote: () => randomNoteLetter
+  }));
+
+  useEffect(() => {
+    if (onNoteChange) {
+      onNoteChange(randomNoteLetter);
+    }
+  }, [randomNoteLetter, onNoteChange]);
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
       <svg 
@@ -118,19 +137,25 @@ const MusicStaff = () => {
           />
         ))}
       </svg>
-      <div className="mt-4 flex justify-center text-2xl font-bold">
-        {randomNoteLetter}
-      </div>
-      <div className="mt-4 flex justify-center">
-        <button 
-          onClick={generateNew}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
-          Next Note
-        </button>
-      </div>
+      {showAnswer && (
+        <div className="mt-4 flex justify-center text-2xl font-bold">
+          {randomNoteLetter}
+        </div>
+      )}
+      {showAnswer && (
+        <div className="mt-4 flex justify-center">
+          <button 
+            onClick={generateNew}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          >
+            Next Note
+          </button>
+        </div>
+      )}
     </div>
   );
-};
+});
+
+MusicStaff.displayName = 'MusicStaff';
 
 export default MusicStaff;

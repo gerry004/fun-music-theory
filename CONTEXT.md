@@ -1,15 +1,66 @@
-# Fun Music Theory Learning App
+# Music Theory Learning App Specification
+A gamified educational application designed to help children learn music theory through interactive gameplay.
 
-## Types of Games
+## Application Structure
 
-- Anstey
-- it should say C, D, E, F, G, and then it should listen, for the pitch, and then say if it is the correct note or not.
+### Home Screen
+The main landing page featuring:
+- Header displaying "Learn Music Theory"
+- Two game options presented as interactive cards:
+  - Play from Note Names
+  - Read Notes from Stave
 
-- Zoe
-- it should display the sheet music of a single note, and then it should give a series of options, A, B, C, D, E, F, G, then it should tell you if it is correct or not.
-- there should be two modes
-- one where you there are 15 questions, and see how long it takes for you to get 15 correct
-- one where you have 30 seconds to answer as many questions correct as possible
-- there should be a progress bar
-- there should be a timer
+Each game card, when clicked, triggers a modal containing:
+- Detailed game description
+- "Start Game" button positioned in bottom-right corner
+
+### Read Notes from Stave Game Flow
+
+#### Game Interface Elements
+- Navigation Bar:
+  - Exit button (X) in top-left corner
+  - Progress bar in top-center showing game completion
+  - Lives counter with heart icon in top-right
+- Game Area
+  - Musical stave displaying a single note
+  - Note selection options bar at bottom
+  - Answer submission interface
+
+- Gameplay Mechanics
+  - Note Selection:
+    - Available options: C, C#, D, D#, E, F, F#, G, G#, A, A#, B
+    - Selecting a note reveals the "Check" button in the bottmo right
+
+- Answer Validation
+  - Correct answers trigger:
+    - Success animation
+    - Green checkmark indicator 
+
+  - Incorrect answers trigger:
+    - Failure animation
+    - Red cross indicator
+    - Reduction in remaining lives    
+
+- Game Progress
+  - Total of 15 questions per session
+  - Progress tracked via top progress bar
+
+- Game Exit Flows
+  - Manual Exit:
+    - Clicking X button displays modal with options:
+      - "Keep Playing"
+      - "End Session" (returns to home screen)
+
+  - Game Completion:
+    - After 15 questions, displays results screen showing:
+      - Number of correct answers
+      - Number of incorrect answers
+      - "Play Again" button
+      - "Return to Home" button
+
+  - Game Over:
+    - Triggered when all lives are lost
+    - Displays game over modal with:
+      - "Play Again" button
+      - "Return to Home" button
 
