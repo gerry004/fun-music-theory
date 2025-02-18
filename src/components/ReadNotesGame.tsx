@@ -111,18 +111,18 @@ export const ReadNotesGame = () => {
       <Modal
         isOpen={showExitModal}
         onClose={handleExitCancel}
-        title="Exit Game?"
+        title="Leaving so soon?"
       >
         <div className="flex flex-col gap-4">
           <button
             onClick={handleExitCancel}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded"
           >
             Keep Playing
           </button>
           <button
             onClick={handleExitConfirm}
-            className="px-4 py-2 bg-gray-200 rounded"
+            className="px-4 py-2 text-red-500 font-semibold rounded"
           >
             End Session
           </button>
@@ -133,7 +133,7 @@ export const ReadNotesGame = () => {
       <Modal
         isOpen={gameState !== 'playing'}
         onClose={() => {}}
-        title={gameState === 'completed' ? 'Game Completed!' : 'Game Over'}
+        title={gameState === 'completed' ? 'Congratulations!' : 'You Ran Out of Lives'}
       >
         <div className="flex flex-col gap-4">
           <div className="text-center">
@@ -141,7 +141,7 @@ export const ReadNotesGame = () => {
             <p className="text-gray-600">
               {gameState === 'completed' 
                 ? `You got ${score} correct answers!` 
-                : 'Better luck next time!'}
+                : 'Try again!'}
             </p>
           </div>
           <button

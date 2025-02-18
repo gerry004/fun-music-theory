@@ -13,10 +13,10 @@ interface BottomBarProps {
 export const BottomBar = ({ isCorrect, correctSolution, onCheck, onContinue, showCheck }: BottomBarProps) => {
   return (
     <div className="fixed bottom-0 left-0 right-0">
-      <div className={`h-1 w-full ${
-        isCorrect === true ? 'bg-green-500' : 
-        isCorrect === false ? 'bg-red-500' : 
-        'bg-transparent'
+      <div className={`w-full ${
+        isCorrect === true ? 'h-1 bg-green-500' : 
+        isCorrect === false ? 'h-1 bg-red-500' : 
+        'border-t border-gray-200'
       }`} />
       
       <div className="p-4">

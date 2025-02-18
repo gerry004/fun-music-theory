@@ -23,8 +23,8 @@ export const NoteSelectionBar = ({ selectedNote, onNoteSelect, disabled = false 
               selectedNote === note
                 ? 'bg-blue-500 text-white'
                 : disabled
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-800 text-white hover:bg-gray-700'
+                ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                : 'bg-gray-600 text-white hover:bg-gray-700'
             }`}
           >
             {note}
