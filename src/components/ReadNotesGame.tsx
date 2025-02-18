@@ -1,15 +1,18 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { GameLayout } from './GameLayout';
 import { NoteSelectionBar } from './NoteSelectionBar';
+import { BottomBar } from './BottomBar';
 import MusicStaff from './MusicStaff';
 import { Modal } from './Modal';
 
 const TOTAL_QUESTIONS = 15;
-const INITIAL_LIVES = 3;
+const INITIAL_LIVES = 5;
 
 export const ReadNotesGame = () => {
+  const router = useRouter();
   const [lives, setLives] = useState(INITIAL_LIVES);
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
@@ -17,6 +20,7 @@ export const ReadNotesGame = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [gameState, setGameState] = useState<'playing' | 'completed' | 'over'>('playing');
   const [currentNote, setCurrentNote] = useState<string>('');
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   
   // Reference to MusicStaff component
   const staffRef = React.useRef<{ generateNew: () => void; getCurrentNote: () => string; } | null>(null);
@@ -27,23 +31,23 @@ export const ReadNotesGame = () => {
     setSelectedNote(note);
   };
 
-  const handleSubmit = () => {
+  const handleCheck = () => {
     if (!selectedNote) return;
 
-    const isCorrect = selectedNote === currentNote;
+    const isAnswerCorrect = selectedNote === currentNote;
+    setIsCorrect(isAnswerCorrect);
 
-    if (isCorrect) {
+    if (isAnswerCorrect) {
       setScore(score + 1);
-      // Show success animation
     } else {
       setLives(lives - 1);
       if (lives <= 1) {
         setGameState('over');
-        return;
       }
-      // Show failure animation
     }
+  };
 
+  const handleContinue = () => {
     if (questionNumber >= TOTAL_QUESTIONS) {
       setGameState('completed');
       return;
@@ -51,13 +55,14 @@ export const ReadNotesGame = () => {
 
     setQuestionNumber(questionNumber + 1);
     setSelectedNote(null);
+    setIsCorrect(null);
     staffRef.current?.generateNew();
     setCurrentNote(staffRef.current?.getCurrentNote() || '');
   };
 
   const handleExit = () => setShowExitModal(true);
   const handleExitConfirm = () => {
-    // Navigate to home
+    router.push('/');
   };
   const handleExitCancel = () => setShowExitModal(false);
 
@@ -67,6 +72,7 @@ export const ReadNotesGame = () => {
     setQuestionNumber(1);
     setSelectedNote(null);
     setGameState('playing');
+    setIsCorrect(null);
     staffRef.current?.generateNew();
     setCurrentNote(staffRef.current?.getCurrentNote() || '');
   };
@@ -78,6 +84,9 @@ export const ReadNotesGame = () => {
         progress={progress}
         onExit={handleExit}
       >
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white">What's the name of this note?</h2>
+        </div>
         <MusicStaff
           ref={staffRef}
           onNoteChange={(note) => setCurrentNote(note)}
@@ -86,9 +95,16 @@ export const ReadNotesGame = () => {
         <NoteSelectionBar
           selectedNote={selectedNote}
           onNoteSelect={handleNoteSelect}
-          onSubmit={handleSubmit}
         />
       </GameLayout>
+
+      <BottomBar
+        isCorrect={isCorrect}
+        correctSolution={isCorrect === false ? currentNote : undefined}
+        onCheck={handleCheck}
+        onContinue={handleContinue}
+        showCheck={selectedNote !== null}
+      />
 
       {/* Exit Modal */}
       <Modal
