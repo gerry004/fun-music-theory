@@ -62,7 +62,7 @@ export default function Home() {
   const games = [
     {
       title: "Read the Notes! 🎼",
-      description: "Can you identify what note is on the music staff? Let's find out!",
+      description: "Can you identify notes on a music stave? Let's find out!",
       href: "/games/read-notes",
       icon: <Music className="w-16 h-16 text-white" />,
       color: "bg-gradient-to-br from-pink-500 to-orange-400"

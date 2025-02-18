@@ -9,7 +9,7 @@ interface NoteSelectionBarProps {
 }
 
 export const NoteSelectionBar = ({ selectedNote, onNoteSelect, disabled = false }: NoteSelectionBarProps) => {
-  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
