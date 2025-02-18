@@ -95,6 +95,7 @@ export const ReadNotesGame = () => {
         <NoteSelectionBar
           selectedNote={selectedNote}
           onNoteSelect={handleNoteSelect}
+          disabled={isCorrect !== null}
         />
       </GameLayout>
 
