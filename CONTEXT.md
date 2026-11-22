@@ -1,4 +1,4 @@
-# Music Theory Learning App Specification
+# Solfa — Music Theory Learning App Specification
 A gamified educational application designed to help children learn music theory through interactive gameplay.
 
 ## Application Structure
@@ -99,4 +99,3 @@ Each game card, when clicked, triggers a modal containing:
     - Displays game over modal with:
       - "Play Again" button
       - "Return to Home" button
-

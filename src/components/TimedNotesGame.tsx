@@ -1,134 +1,77 @@
 "use client"
 
-import React, { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { GameLayout } from './GameLayout';
-import { NoteSelectionBar } from './NoteSelectionBar';
-import MusicStaff from './MusicStaff';
-import { Modal } from './Modal';
-import { Timer } from './Timer';
-import { GameState, GameScore } from '../types/game';
+import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { GameLayout } from "./GameLayout";
+import { NoteSelectionBar } from "./NoteSelectionBar";
+import MusicStaff from "./MusicStaff";
+import { Modal } from "./Modal";
+import { Timer } from "./Timer";
+import { GameState, GameScore } from "../types/game";
 
-const GAME_DURATION = 30; // seconds
+const GAME_DURATION = 30;
 
 export const TimedNotesGame = () => {
   const router = useRouter();
-  const [gameState, setGameState] = useState<GameState>('playing');
+  const [gameState, setGameState] = useState<GameState>("playing");
   const [showExitModal, setShowExitModal] = useState(false);
-  const [currentNote, setCurrentNote] = useState<string>('');
+  const [currentNote, setCurrentNote] = useState("");
   const [score, setScore] = useState<GameScore>({ correct: 0, incorrect: 0 });
-  
-  const staffRef = useRef<{ generateNew: () => void; getCurrentNote: () => string; } | null>(null);
+  const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
+  const staffRef = useRef<{ generateNew: () => void; getCurrentNote: () => string } | null>(null);
+  const total = score.correct + score.incorrect;
+  const accuracy = total === 0 ? 0 : Math.round((score.correct / total) * 100);
 
   const handleNoteSelect = (note: string) => {
-    const isCorrect = note === currentNote;
-    
-    setScore(prev => ({
-      correct: prev.correct + (isCorrect ? 1 : 0),
-      incorrect: prev.incorrect + (isCorrect ? 0 : 1)
+    const answerIsCorrect = note === currentNote;
+    setScore((value) => ({
+      correct: value.correct + (answerIsCorrect ? 1 : 0),
+      incorrect: value.incorrect + (answerIsCorrect ? 0 : 1),
     }));
-
-    // Generate new note immediately after selection
     staffRef.current?.generateNew();
-    setCurrentNote(staffRef.current?.getCurrentNote() || '');
   };
-
-  const handleTimeUp = () => {
-    setGameState('completed');
-  };
-  const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
-
-  const handleExit = () => setShowExitModal(true);
-  const handleExitConfirm = () => router.push('/');
-  const handleExitCancel = () => setShowExitModal(false);
 
   const handleRestart = () => {
     setScore({ correct: 0, incorrect: 0 });
-    setGameState('playing');
+    setTimeLeft(GAME_DURATION);
+    setGameState("playing");
     staffRef.current?.generateNew();
-    setCurrentNote(staffRef.current?.getCurrentNote() || '');
   };
 
   return (
     <>
       <GameLayout
         lives={0}
-        progress={(GAME_DURATION - timeLeft) / GAME_DURATION * 100}
-        onExit={handleExit}
+        progress={((GAME_DURATION - timeLeft) / GAME_DURATION) * 100}
+        onExit={() => setShowExitModal(true)}
         rightElement={
-          <Timer
-            timeLeft={timeLeft}
-            setTimeLeft={setTimeLeft}
-            duration={GAME_DURATION} 
-            onTimeUp={handleTimeUp}
-            isActive={gameState === 'playing'}
-          />
+          <Timer timeLeft={timeLeft} setTimeLeft={setTimeLeft} duration={GAME_DURATION} onTimeUp={() => setGameState("completed")} isActive={gameState === "playing"} />
         }
       >
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-black">What's the name of this note?</h2>
-        </div>
-        <MusicStaff
-          ref={staffRef}
-          onNoteChange={(note) => setCurrentNote(note)}
-          showAnswer={false}
-        />
-        <NoteSelectionBar
-          selectedNote={null}
-          onNoteSelect={handleNoteSelect}
-          disabled={gameState !== 'playing'}
-        />
+        <p className="game-kicker">Tempo mode · {total} notes read</p>
+        <h1 className="game-question">Read it on the beat.</h1>
+        <MusicStaff ref={staffRef} onNoteChange={setCurrentNote} showAnswer={false} />
+        <NoteSelectionBar selectedNote={null} onNoteSelect={handleNoteSelect} disabled={gameState !== "playing"} />
       </GameLayout>
 
-      {/* Exit Modal */}
-      <Modal
-        isOpen={showExitModal}
-        onClose={handleExitCancel}
-        title="Leaving so soon?"
-      >
-        <div className="flex flex-col gap-4">
-          <button
-            onClick={handleExitCancel}
-            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded"
-          >
-            Keep Playing
-          </button>
-          <button
-            onClick={handleExitConfirm}
-            className="px-4 py-2 text-red-500 font-semibold rounded"
-          >
-            End Session
-          </button>
+      <Modal isOpen={showExitModal} onClose={() => setShowExitModal(false)} title="Pause practice?">
+        <p className="hero-intro" style={{ fontSize: 17, margin: "0 0 26px" }}>The clock will keep its place while you decide.</p>
+        <div className="modal-actions">
+          <button onClick={() => setShowExitModal(false)} className="modal-primary">Keep playing</button>
+          <button onClick={() => router.push("/")} className="modal-secondary">End session</button>
         </div>
       </Modal>
 
-      {/* Game Completion Modal */}
-      <Modal
-        isOpen={gameState === 'completed'}
-        onClose={() => {}}
-        title="Time's Up!"
-      >
-        <div className="flex flex-col gap-4">
-          <div className="text-center">
-            <p className="text-green-600">Correct: {score.correct}</p>
-            <p className="text-red-600">Incorrect: {score.incorrect}</p>
-            <p className="text-gray-600">Total: {score.correct + score.incorrect}</p>
-            <p className="text-gray-600">Accuracy: {((score.correct / (score.correct + score.incorrect)) * 100).toFixed(2)}%</p>
-          </div>
-          <button
-            onClick={handleRestart}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Play Again
-          </button>
-          <button
-            onClick={handleExitConfirm}
-            className="px-4 py-2 bg-gray-200 rounded"
-          >
-            Return to Home
-          </button>
+      <Modal isOpen={gameState === "completed"} onClose={() => {}} title="Time’s up.">
+        <div className="score-grid">
+          <div className="score-cell"><span>Correct</span><strong>{score.correct}</strong></div>
+          <div className="score-cell"><span>Accuracy</span><strong>{accuracy}%</strong></div>
+        </div>
+        <div className="modal-actions">
+          <button onClick={handleRestart} className="modal-primary">Play again</button>
+          <button onClick={() => router.push("/")} className="modal-secondary">Return home</button>
         </div>
       </Modal>
     </>
   );
-}; 
+};
