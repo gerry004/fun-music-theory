@@ -43,16 +43,10 @@ export default function Home() {
         ))}
       </div>
 
-      <nav className="relative flex items-center justify-between px-6 py-4 sm:px-10 border-b border-white/20 bg-white/10 backdrop-blur-sm">
-        <Link href="/" className="flex items-center gap-3 text-white" aria-label="Solfa home">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-white text-indigo-500 font-bold italic shadow-sm">
-            S
-          </span>
-          <span className="text-xl font-bold tracking-tight">Solfa</span>
+      <nav className="relative px-6 py-5 sm:px-10 bg-gradient-to-r from-pink-500 to-orange-400 shadow-md">
+        <Link href="/" className="text-2xl font-bold tracking-tight text-white" aria-label="Solfa home">
+          Solfa
         </Link>
-        <p className="hidden sm:block text-sm font-medium text-white/80">
-          Playful music theory practice
-        </p>
       </nav>
       
       <header className="relative py-14 text-center px-4">
