@@ -18,7 +18,6 @@ const modes = [
     description: "Take your time and read 15 notes before your 5 lives run out.",
     detail: "15 questions · 5 lives",
     action: "Start Lives Mode",
-    accent: "from-amber-200 to-yellow-300",
     icon: Heart,
     iconColor: "text-rose-500",
   },
@@ -28,7 +27,6 @@ const modes = [
     description: "Read as many notes as you can before the clock ends.",
     detail: "30 seconds · Quick play",
     action: "Start Timed Mode",
-    accent: "from-emerald-200 to-green-300",
     icon: Timer,
     iconColor: "text-violet-600",
   },
@@ -86,22 +84,12 @@ export default function Home() {
         </header>
 
         <section className="mx-auto mt-10 grid max-w-6xl gap-6 lg:mt-14 lg:grid-cols-2" aria-label="Choose a practice mode">
-          {modes.map(({ href, title, description, detail, action, accent, icon: Icon, iconColor }) => (
+          {modes.map(({ href, title, description, detail, action, icon: Icon, iconColor }) => (
             <article
               key={href}
               className="group overflow-hidden rounded-[2rem] border-4 border-white/80 bg-amber-50 shadow-[0_14px_35px_rgba(49,46,129,0.18)] transition-transform duration-300 hover:-translate-y-1"
             >
-              <div className={`relative flex min-h-44 items-center justify-center overflow-hidden bg-gradient-to-br ${accent} p-7`}>
-                <div className="absolute inset-x-8 bottom-5 space-y-3 opacity-30" aria-hidden="true">
-                  {[0, 1, 2, 3, 4].map((line) => (
-                    <div key={line} className="h-0.5 rounded-full bg-indigo-900" />
-                  ))}
-                </div>
-                <Music2 className="absolute right-[23%] top-[34%] h-12 w-12 text-indigo-900/80" aria-hidden="true" />
-                <Music2 className="absolute left-[30%] top-[52%] h-10 w-10 text-indigo-900/80" aria-hidden="true" />
-              </div>
-
-              <div className="relative flex flex-col items-center px-6 pb-7 pt-8 text-center sm:px-10">
+              <div className="relative flex min-h-[26rem] flex-col items-center justify-center px-6 py-9 text-center sm:px-10">
                 <div className={`mb-3 flex items-center justify-center gap-3 ${iconColor}`}>
                   <Icon className="h-12 w-12" strokeWidth={2.5} fill={title === "Lives Mode" ? "currentColor" : "none"} aria-hidden="true" />
                   <h2 className="text-4xl font-extrabold tracking-tight text-indigo-950 sm:text-5xl">{title}</h2>
