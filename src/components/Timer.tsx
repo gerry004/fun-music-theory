@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect } from 'react';
-import { Timer as TimerIcon } from 'lucide-react';
 
 interface TimerProps {
   timeLeft: number;
@@ -18,7 +17,7 @@ export const Timer: React.FC<TimerProps> = ({ timeLeft, setTimeLeft, duration, o
     if (isActive) {
       setTimeLeft(duration);
     }
-  }, [isActive, duration, setTimeLeft]);
+  }, [isActive, duration]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -41,12 +40,11 @@ export const Timer: React.FC<TimerProps> = ({ timeLeft, setTimeLeft, duration, o
         clearInterval(timer);
       }
     };
-  }, [timeLeft, isActive, onTimeUp, setTimeLeft]);
+  }, [timeLeft, isActive, onTimeUp]);
 
   return (
-    <div className="game-status" aria-label={`${timeLeft} seconds remaining`}>
-      <TimerIcon size={20} />
-      <span>{timeLeft}s</span>
+    <div className="text-xl font-bold">
+      Time: {timeLeft}s
     </div>
   );
-};
+}; 
